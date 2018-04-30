@@ -28,8 +28,8 @@ public class ProdutoResource {
 	}
 	
 	@GetMapping(produces="application/json")
-	public @ResponseBody Iterable<Produto> listaProdutos(String nome){
-		Iterable<Produto> listaProdutos = (Iterable<Produto>) pr.findOne(nome);
+	public @ResponseBody Produto listaProdutos(String nome){
+		Produto listaProdutos = pr.findOne(nome);
 		return listaProdutos;
 	}
 	

@@ -15,7 +15,7 @@ public class DataConfiguration {
 	@Bean
 	public DataSource dataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		dataSource.setDriverClassName("com.postgresql.jdbc.Driver");
+		dataSource.setDriverClassName("org.postgresql.Driver");
 		dataSource.setUrl("jdbc:postgresql://localhost:8080/leilao");
 		dataSource.setUsername("root");
 		dataSource.setPassword("root");
