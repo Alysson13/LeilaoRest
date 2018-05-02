@@ -9,6 +9,7 @@ import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
+
 @Configuration
 public class DataConfiguration {
 	
@@ -16,9 +17,9 @@ public class DataConfiguration {
 	public DataSource dataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName("org.postgresql.Driver");
-		dataSource.setUrl("jdbc:postgresql://localhost:8080/leilao");
-		dataSource.setUsername("root");
-		dataSource.setPassword("root");
+		dataSource.setUrl("jdbc:postgresql://localhost:5432/leilao");
+		dataSource.setUsername("teste");
+		dataSource.setPassword("teste");
 		return dataSource;
 	}
 	
@@ -28,7 +29,7 @@ public class DataConfiguration {
 		adapter.setDatabase(Database.POSTGRESQL);
 		adapter.setShowSql(true);
 		adapter.setGenerateDdl(true);
-		adapter.setDatabasePlatform("org.hibernate.dialect.PostgreSQLDialect");
+		adapter.setDatabasePlatform("org.hibernate.dialect.PostgreSQL9Dialect");
 		adapter.setPrepareConnection(true);
 		return adapter;
 	}
