@@ -23,39 +23,42 @@ public class ProdutoResource {
 	private ProdutoService ps;
 	
 	@GetMapping(produces = "application/json", value = "/")
-	public @ResponseBody void listaProdutos() {
-		ps.obtemTodosProdutos();
+	public @ResponseBody Iterable<Produto> listaProdutos() {
+		return ps.obtemTodosProdutos();
 	}
 	
 	@GetMapping(produces = "application/json", value = "/{nome}")
-	public @ResponseBody void listaProdutos(@PathVariable("nome") String nome){
-		ps.obtemProdutoporNome(nome);
+	public @ResponseBody Produto listaProdutos(@RequestBody @PathVariable("nome") String nome){
+		return ps.obtemProdutoporNome(nome);
 	}
 	
-	@PostMapping(value = "/cadastrounitario/{nome}")
-	public Produto cadastraProduto(@RequestBody @Valid @PathVariable("nome") Produto produto) {
+	@PostMapping(value = "/cadastrounitario")
+	public Produto cadastraProduto(@RequestBody @Valid Produto produto) {
 		ps.salvaProdutos(produto);
 		ps.checaData(produto.getNome());
 		return produto;
 	}
 	
 	@PostMapping(value = "/oferta/{nome}")
-	public void aceitaOferta(@RequestBody @Valid @PathVariable("nome") String nome) {
+	public Produto aceitaOferta(@RequestBody @Valid @PathVariable("nome") String nome, double oferta) {
 		ps.checaData(nome);
 		ps.deadEndOferta(nome);
-		ps.aumentaPorOferta(nome);
+		ps.aumentaPorOferta(nome, oferta);
+		return ps.obtemProdutoporNome(nome);
 	}
 	
 	@PostMapping(value = "/incremento/{nome}")
-	public void aceitaIncremento(@RequestBody @Valid @PathVariable("nome") String nome) {
+	public Produto aceitaIncremento(@RequestBody @Valid @PathVariable("nome") String nome) {
 		ps.checaData(nome);
 		ps.deadEndOferta(nome);
 		ps.aumentaPorIncremento(nome);
+		return ps.obtemProdutoporNome(nome);
 	}
 	
 	@DeleteMapping(value = "/delete/{nome}")
-	public void deletaProduto(@RequestBody @PathVariable("nome") @Valid String nome) {
+	public String deletaProduto(@RequestBody @PathVariable("nome") @Valid String nome) {
 		ps.deletaProdutos(nome);
+		return "Produto " + nome + " deletado do banco de dados.";
 	}
 		
 }

@@ -3,9 +3,8 @@ package br.com.adal.entidade;
 import java.time.Instant;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -13,19 +12,15 @@ import org.hibernate.validator.constraints.NotBlank;
 public class Produto {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long codigo;
-	
 	@NotBlank
 	private String nome;
 	
-	@NotBlank
+	@NotNull
 	private double valorBase;
 	
-	@NotBlank
+	@NotNull
 	private double incOmissao;
 	
-	@NotBlank
 	private Instant limiteVenda;
 	
 	private double valorAtual;
@@ -54,14 +49,6 @@ public class Produto {
 
 	public void setValorAtual(double valorAtual) {
 		this.valorAtual = valorAtual;
-	}
-	
-	public long getCodigo() {
-		return codigo;
-	}
-
-	public void setCodigo(long codigo) {
-		this.codigo = codigo;
 	}
 
 	public String getNome() {

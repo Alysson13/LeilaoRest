@@ -40,9 +40,10 @@ public class ProdutoService {
 		pr.saveAndFlush(pd);
 	}
 	
-	public void aumentaPorOferta(String nome) {
+	public void aumentaPorOferta(String nome, double oferta) {
 		pd = pr.findOne(nome);
-		if ((pd.getValorAtual() + pd.getIncOmissao())<pd.getOferta()) {
+		pd.setOferta(oferta);
+		if ((pd.getValorAtual() + pd.getIncOmissao())>=(pd.getOferta())) {
 			pd.setValorAtual(pd.getValorAtual() + pd.getIncOmissao());
 			pr.saveAndFlush(pd);
 		}
