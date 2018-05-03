@@ -7,6 +7,5 @@ import br.com.adal.entidade.Produto;
 
 @Repository
 public interface ProdutoRepository extends JpaRepository<Produto, String>{
-	Produto findByName(String nome);
-	Produto deleteByName(String nome);
+	
 }
