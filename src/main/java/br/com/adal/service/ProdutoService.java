@@ -23,7 +23,7 @@ public class ProdutoService {
 	}
 	
 	public Produto obtemProdutoporNome(String nome){
-		return pr.findOne(nome);
+		return pr.findByNomeIgnoreCase(nome);
 	}
 	
 	public void salvaProdutos(Produto produto) {
@@ -35,13 +35,13 @@ public class ProdutoService {
 	}
 	
 	public void aumentaPorIncremento(String nome) {
-		pd = pr.findOne(nome);
+		pd = pr.findByNomeIgnoreCase(nome);
 		pd.setValorAtual(pd.getValorAtual() + pd.getIncOmissao());
 		pr.saveAndFlush(pd);
 	}
 	
 	public void aumentaPorOferta(String nome, double oferta) {
-		pd = pr.findOne(nome);
+		pd = pr.findByNomeIgnoreCase(nome);
 		pd.setOferta(oferta);
 		if ((pd.getValorAtual() + pd.getIncOmissao())>=(pd.getOferta())) {
 			pd.setValorAtual(pd.getValorAtual() + pd.getIncOmissao());
@@ -54,7 +54,7 @@ public class ProdutoService {
 	}
 	
 	public void checaData(String nome) {
-		pd = pr.findOne(nome);
+		pd = pr.findByNomeIgnoreCase(nome);
 		Instant instant1 = pd.getLimiteVenda();
 		Instant instant2 = Instant.now();
 		if(instant1.compareTo(instant2)<0) {
@@ -68,7 +68,7 @@ public class ProdutoService {
 	}
 	
 	public void deadEndOferta(String nome) {
-		pd = pr.findOne(nome);
+		pd = pr.findByNomeIgnoreCase(nome);
 		Instant instant1 = pd.getLimiteVenda();
 		Instant instant2 = Instant.now();
 		LocalDateTime ldt1 = LocalDateTime.ofInstant(instant1, ZoneId.systemDefault());

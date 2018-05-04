@@ -8,4 +8,5 @@ import br.com.adal.entidade.Produto;
 @Repository
 public interface ProdutoRepository extends JpaRepository<Produto, String>{
 	
+	public Produto findByNomeIgnoreCase(String nome);
 }
