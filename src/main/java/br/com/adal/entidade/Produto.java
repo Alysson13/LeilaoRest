@@ -21,7 +21,6 @@ public class Produto {
 	@NotNull
 	private double incOmissao;
 	
-	@NotBlank
 	private Date limiteVenda;
 	
 	private double valorAtual;
