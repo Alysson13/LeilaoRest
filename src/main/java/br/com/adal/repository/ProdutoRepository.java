@@ -9,4 +9,5 @@ import br.com.adal.entidade.Produto;
 public interface ProdutoRepository extends JpaRepository<Produto, String>{
 	
 	public Produto findByNomeIgnoreCase(String nome);
+	public void deleteByNomeIgnoreCase(String nome);
 }

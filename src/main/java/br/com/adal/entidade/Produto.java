@@ -1,6 +1,6 @@
 package br.com.adal.entidade;
 
-import java.time.Instant;
+import java.util.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -21,7 +21,8 @@ public class Produto {
 	@NotNull
 	private double incOmissao;
 	
-	private Instant limiteVenda;
+	@NotBlank
+	private Date limiteVenda;
 	
 	private double valorAtual;
 	private double oferta;
@@ -75,11 +76,11 @@ public class Produto {
 		this.incOmissao = incOmissao;
 	}
 	
-	public Instant getLimiteVenda() {
+	public Date getLimiteVenda() {
 		return limiteVenda;
 	}
 	
-	public void setLimiteVenda(Instant limiteVenda) {
+	public void setLimiteVenda(Date limiteVenda) {
 		this.limiteVenda = limiteVenda;
 	}
 	

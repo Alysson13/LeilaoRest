@@ -1,5 +1,6 @@
 package br.com.adal.service;
 
+import java.util.Date;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -31,7 +32,7 @@ public class ProdutoService {
 	}
 	
 	public void deletaProdutos(String nome) {
-		pr.delete(nome);
+		pr.deleteByNomeIgnoreCase(nome);
 	}
 	
 	public void aumentaPorIncremento(String nome) {
@@ -55,7 +56,7 @@ public class ProdutoService {
 	
 	public void checaData(String nome) {
 		pd = pr.findByNomeIgnoreCase(nome);
-		Instant instant1 = pd.getLimiteVenda();
+		Instant instant1 = pd.getLimiteVenda().toInstant();
 		Instant instant2 = Instant.now();
 		if(instant1.compareTo(instant2)<0) {
 			pd.setEstado("FECHADO");
@@ -69,7 +70,7 @@ public class ProdutoService {
 	
 	public void deadEndOferta(String nome) {
 		pd = pr.findByNomeIgnoreCase(nome);
-		Instant instant1 = pd.getLimiteVenda();
+		Instant instant1 = pd.getLimiteVenda().toInstant();
 		Instant instant2 = Instant.now();
 		LocalDateTime ldt1 = LocalDateTime.ofInstant(instant1, ZoneId.systemDefault());
 		LocalDateTime ldt2 = LocalDateTime.ofInstant(instant2, ZoneId.systemDefault());
@@ -79,7 +80,9 @@ public class ProdutoService {
 		int minute2 = ldt2.getMinute();
 		if((hour1 - hour2 == 0) && (minute2 - minute1 <= 1) && (minute2 - minute1 > 0)) {
 			instant1 = ldt1.atZone(ZoneId.systemDefault()).toInstant();
-			pd.setLimiteVenda(instant1.plusSeconds(30));
+			instant1.plusSeconds(30);
+			Date date = Date.from(instant1);
+			pd.setLimiteVenda(date);
 			pr.saveAndFlush(pd);
 		}
 	}

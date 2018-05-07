@@ -2,6 +2,8 @@ package br.com.adal.swagger;
 
 import org.springframework.context.annotation.Bean;
 
+import com.google.common.base.Predicates;
+
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -17,6 +19,9 @@ public class SwaggerConfig {
 	public Docket api() {
 		return new Docket(DocumentationType.SWAGGER_2).select()
 				.apis(RequestHandlerSelectors.basePackage("br.com.adal"))
+				.apis(Predicates.not(RequestHandlerSelectors.basePackage("org.springframework.boot")))
+				.apis(Predicates.not(RequestHandlerSelectors.basePackage("org.springframework.cloud")))
+				.apis(Predicates.not(RequestHandlerSelectors.basePackage("org.springframework.data.rest.webmvc")))
 				.paths(PathSelectors.any()).build()
 				.apiInfo(metaInfo());
 	}
