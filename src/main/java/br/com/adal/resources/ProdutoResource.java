@@ -4,6 +4,7 @@ import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import br.com.adal.entidade.Produto;
 import br.com.adal.service.ProdutoService;
 
 @RestController
+@CrossOrigin(origins="*")
 @RequestMapping("/leilao")
 public class ProdutoResource {
 	
@@ -48,35 +50,35 @@ public class ProdutoResource {
 		return produto;
 	}
 	
-	@PostMapping(value = "/oferta/{nome}")
-	public Produto aceitaOferta(@RequestBody @Valid @PathVariable("nome") String nome, double oferta) {
-		if(ps.obtemProdutoporNome(nome) == null) {
-			throw new EntityNotFoundException("O produto " + nome + " não está cadastrado na base de dados.");
+	@PostMapping(value = "/oferta")
+	public Produto aceitaOferta(@RequestBody @Valid Produto produto) {
+		if(ps.obtemProdutoporNome(produto.getNome()) == null) {
+			throw new EntityNotFoundException("O produto " + produto.getNome() + " não está cadastrado na base de dados.");
 		}
-		ps.checaData(nome);
-		ps.deadEndOferta(nome);
-		ps.aumentaPorOferta(nome, oferta);
-		return ps.obtemProdutoporNome(nome);
+		ps.checaData(produto.getNome());
+		ps.deadEndOferta(produto.getNome());
+		ps.aumentaPorOferta(produto.getNome(), produto.getOferta());
+		return ps.obtemProdutoporNome(produto.getNome());
 	}
 	
-	@PostMapping(value = "/incremento/{nome}")
-	public Produto aceitaIncremento(@RequestBody @Valid @PathVariable("nome") String nome) {
-		if(ps.obtemProdutoporNome(nome) == null) {
-			throw new EntityNotFoundException("O produto " + nome + " não está cadastrado na base de dados.");
+	@PostMapping(value = "/incremento")
+	public Produto aceitaIncremento(@RequestBody @Valid Produto produto) {
+		if(ps.obtemProdutoporNome(produto.getNome()) == null) {
+			throw new EntityNotFoundException("O produto " + produto.getNome() + " não está cadastrado na base de dados.");
 		}
-		ps.checaData(nome);
-		ps.deadEndOferta(nome);
-		ps.aumentaPorIncremento(nome);
-		return ps.obtemProdutoporNome(nome);
+		ps.checaData(produto.getNome());
+		ps.deadEndOferta(produto.getNome());
+		ps.aumentaPorIncremento(produto.getNome());
+		return ps.obtemProdutoporNome(produto.getNome());
 	}
 	
-	@DeleteMapping(value = "/delete/{nome}")
-	public String deletaProduto(@RequestBody @PathVariable("nome") @Valid String nome) {
-		if(ps.obtemProdutoporNome(nome) == null) {
-			throw new EntityNotFoundException("O produto " + nome + " já não existe na base de dados.");
+	@DeleteMapping(value = "/delete")
+	public String deletaProduto(@RequestBody @Valid Produto produto) {
+		if(ps.obtemProdutoporNome(produto.getNome()) == null) {
+			throw new EntityNotFoundException("O produto " + produto.getNome() + " já não existe na base de dados.");
 		}
-		ps.deletaProdutos(nome);
-		return "Produto " + nome + " deletado do banco de dados.";
+		ps.deletaProdutos(produto.getNome());
+		return "Produto " + produto.getNome() + " deletado do banco de dados.";
 	}
 		
 }
