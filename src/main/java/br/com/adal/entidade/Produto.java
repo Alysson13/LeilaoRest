@@ -1,8 +1,10 @@
 package br.com.adal.entidade;
 
-import java.util.Date;
+import java.time.Instant;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.NotNull;
 
@@ -12,18 +14,19 @@ import org.hibernate.validator.constraints.NotBlank;
 public class Produto {
 	
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	private double id;
+	
 	@NotBlank
 	private String nome;
 	
 	@NotNull
-	private double valorBase;
+	private double valorAtual;
 	
 	@NotNull
 	private double incOmissao;
 	
-	private Date limiteVenda;
-	
-	private double valorAtual;
+	private Instant limiteVenda;
 	private double oferta;
 	private String estado;
 	
@@ -59,14 +62,6 @@ public class Produto {
 		this.nome = nome;
 	}
 	
-	public double getValorBase() {
-		return valorBase;
-	}
-	
-	public void setValorBase(double valorBase) {
-		this.valorBase = valorBase;
-	}
-	
 	public double getIncOmissao() {
 		return incOmissao;
 	}
@@ -75,11 +70,11 @@ public class Produto {
 		this.incOmissao = incOmissao;
 	}
 	
-	public Date getLimiteVenda() {
+	public Instant getLimiteVenda() {
 		return limiteVenda;
 	}
 	
-	public void setLimiteVenda(Date limiteVenda) {
+	public void setLimiteVenda(Instant limiteVenda) {
 		this.limiteVenda = limiteVenda;
 	}
 	

@@ -2,6 +2,7 @@ package br.com.adal.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.adal.entidade.Produto;
 
@@ -9,5 +10,9 @@ import br.com.adal.entidade.Produto;
 public interface ProdutoRepository extends JpaRepository<Produto, String>{
 	
 	public Produto findByNomeIgnoreCase(String nome);
+	
+	public Produto findById(double id);
+	
+	@Transactional
 	public void deleteByNomeIgnoreCase(String nome);
 }

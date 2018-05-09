@@ -1,13 +1,12 @@
 package br.com.adal.service;
 
+import java.time.Duration;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.adal.entidade.CadastroDTO;
 import br.com.adal.entidade.Produto;
 import br.com.adal.repository.ProdutoRepository;
 
@@ -27,8 +26,16 @@ public class ProdutoService {
 		return pr.findByNomeIgnoreCase(nome);
 	}
 	
-	public void salvaProdutos(Produto produto) {
-		pr.save(produto);
+	public Produto obtemProdutoporId(double id) {
+		return pr.findById(id);
+	}
+	
+	public void salvaProdutos(CadastroDTO cadastroDTO) {
+		pd.setNome(cadastroDTO.getNome());
+		pd.setIncOmissao(cadastroDTO.getIncOmissao());
+		pd.setLimiteVenda(cadastroDTO.getLimiteVenda());
+		pd.setValorAtual(cadastroDTO.getValorAtual());
+		pr.save(pd);
 	}
 	
 	public void deletaProdutos(String nome) {
@@ -37,6 +44,12 @@ public class ProdutoService {
 	
 	public void aumentaPorIncremento(String nome) {
 		pd = pr.findByNomeIgnoreCase(nome);
+		pd.setValorAtual(pd.getValorAtual() + pd.getIncOmissao());
+		pr.saveAndFlush(pd);
+	}
+	
+	public void aumentaPorIncremento(double id) {
+		pd = pr.findById(id);
 		pd.setValorAtual(pd.getValorAtual() + pd.getIncOmissao());
 		pr.saveAndFlush(pd);
 	}
@@ -54,11 +67,40 @@ public class ProdutoService {
 		}
 	}
 	
+	public void aumentaPorOferta(double id, double oferta) {
+		pd = pr.findById(id);
+		pd.setOferta(oferta);
+		if ((pd.getValorAtual() + pd.getIncOmissao())>=(pd.getOferta())) {
+			pd.setValorAtual(pd.getValorAtual() + pd.getIncOmissao());
+			pr.saveAndFlush(pd);
+		}
+		else {
+			pd.setValorAtual(pd.getOferta());
+			pr.saveAndFlush(pd);
+		}
+	}
+	
 	public void checaData(String nome) {
 		pd = pr.findByNomeIgnoreCase(nome);
-		Instant instant1 = pd.getLimiteVenda().toInstant();
-		Instant instant2 = Instant.now();
-		if(instant1.compareTo(instant2)<0) {
+		Instant ldt1 = pd.getLimiteVenda();
+		Instant ldt2 = Instant.now();
+		Duration duration = Duration.between(ldt2, ldt1);
+		if((duration.getSeconds()) < 10800) {
+			pd.setEstado("FECHADO");
+			pr.saveAndFlush(pd);
+		}
+		else { 
+			pd.setEstado("ABERTO");
+			pr.saveAndFlush(pd);
+		}
+	}
+	
+	public void checaData(double id) {
+		pd = pr.findById(id);
+		Instant ldt1 = pd.getLimiteVenda();
+		Instant ldt2 = Instant.now();
+		Duration duration = Duration.between(ldt2, ldt1);
+		if((duration.getSeconds()) < 10800) {
 			pd.setEstado("FECHADO");
 			pr.saveAndFlush(pd);
 		}
@@ -70,19 +112,22 @@ public class ProdutoService {
 	
 	public void deadEndOferta(String nome) {
 		pd = pr.findByNomeIgnoreCase(nome);
-		Instant instant1 = pd.getLimiteVenda().toInstant();
-		Instant instant2 = Instant.now();
-		LocalDateTime ldt1 = LocalDateTime.ofInstant(instant1, ZoneId.systemDefault());
-		LocalDateTime ldt2 = LocalDateTime.ofInstant(instant2, ZoneId.systemDefault());
-		int hour1 = ldt1.getHour();
-		int hour2 = ldt2.getHour();
-		int minute1 = ldt1.getMinute();
-		int minute2 = ldt2.getMinute();
-		if((hour1 - hour2 == 0) && (minute2 - minute1 <= 1) && (minute2 - minute1 > 0)) {
-			instant1 = ldt1.atZone(ZoneId.systemDefault()).toInstant();
-			instant1.plusSeconds(30);
-			Date date = Date.from(instant1);
-			pd.setLimiteVenda(date);
+		Instant ldt1 = pd.getLimiteVenda();
+		Instant ldt2 = Instant.now();
+		Duration duration = Duration.between(ldt2, ldt1);
+		if((duration.getSeconds() < 10860) && (duration.getSeconds() > 10800)) {
+			pd.setLimiteVenda(ldt1.plusSeconds(30));
+			pr.saveAndFlush(pd);
+		}
+	}
+	
+	public void deadEndOferta(double id) {
+		pd = pr.findById(id);
+		Instant ldt1 = pd.getLimiteVenda();
+		Instant ldt2 = Instant.now();
+		Duration duration = Duration.between(ldt2, ldt1);
+		if((duration.getSeconds() < 10860) && (duration.getSeconds() > 10800)) {
+			pd.setLimiteVenda(ldt1.plusSeconds(30));
 			pr.saveAndFlush(pd);
 		}
 	}

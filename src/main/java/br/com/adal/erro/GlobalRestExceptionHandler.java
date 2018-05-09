@@ -44,7 +44,7 @@ public class GlobalRestExceptionHandler {
 	public ApiErrorResponse handleEntityNotFound(EntityNotFoundException ex) {
 		String error = "Produto(s) não localizado na base de dados";
 		ApiErrorResponse response = new ApiErrorResponse.ApiErrorResponseBuilder()
-				.withError_code("BAD_PRODUTO")
+				.withError_code("404")
 				.withStatus(HttpStatus.NOT_FOUND)
 				.withMessage(ex.getMessage())
 				.withDetail(error)
