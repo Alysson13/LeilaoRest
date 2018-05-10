@@ -1,7 +1,5 @@
 package br.com.adal.entidade;
 
-import java.sql.Blob;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,7 +10,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 @Entity
 public class Produto {
-	
+
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
@@ -29,7 +27,7 @@ public class Produto {
 	private String limiteVenda;
 	private double oferta;
 	private String estado;
-	private Blob foto;
+	private byte[] foto;
 	
 	public String getEstado() {
 		return estado;
@@ -86,12 +84,12 @@ public class Produto {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public Blob getFoto() {
+	
+	public byte[] getFoto() {
 		return foto;
 	}
 
-	public void setFoto(Blob foto) {
+	public void setFoto(byte[] foto) {
 		this.foto = foto;
 	}
 	

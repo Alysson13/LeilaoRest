@@ -1,14 +1,8 @@
 package br.com.adal.service;
 
-import java.sql.Blob;
-import java.sql.SQLException;
 import java.time.Duration;
 import java.time.Instant;
 
-import javax.sql.rowset.serial.SerialBlob;
-import javax.sql.rowset.serial.SerialException;
-
-import org.postgresql.util.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,15 +30,13 @@ public class ProdutoService {
 		return pr.findById(id);
 	}
 	
-	public void salvaProdutos(CadastroDTO cadastroDTO) throws SerialException, SQLException {
+	public void salvaProdutos(CadastroDTO cadastroDTO)  {
 		Produto pd1 = new Produto();
 		pd1.setNome(cadastroDTO.getNome());
 		pd1.setIncOmissao(cadastroDTO.getIncOmissao());
 		pd1.setLimiteVenda(cadastroDTO.getLimiteVenda());
 		pd1.setValorAtual(cadastroDTO.getValorAtual());
-		byte[] decodedByte = Base64.decode(cadastroDTO.getFoto());
-		Blob b = new SerialBlob(decodedByte);
-		pd1.setFoto(b);
+		pd1.setFoto(cadastroDTO.getFoto().getBytes());;
 		pr.save(pd1);
 	}
 	
