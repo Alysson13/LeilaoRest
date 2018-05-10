@@ -82,7 +82,7 @@ public class ProdutoService {
 	
 	public void checaData(String nome) {
 		pd = pr.findByNomeIgnoreCase(nome);
-		Instant ldt1 = pd.getLimiteVenda();
+		Instant ldt1 = Instant.parse(pd.getLimiteVenda());
 		Instant ldt2 = Instant.now();
 		Duration duration = Duration.between(ldt2, ldt1);
 		if((duration.getSeconds()) < 10800) {
@@ -97,7 +97,7 @@ public class ProdutoService {
 	
 	public void checaData(double id) {
 		pd = pr.findById(id);
-		Instant ldt1 = pd.getLimiteVenda();
+		Instant ldt1 = Instant.parse(pd.getLimiteVenda());
 		Instant ldt2 = Instant.now();
 		Duration duration = Duration.between(ldt2, ldt1);
 		if((duration.getSeconds()) < 10800) {
@@ -112,22 +112,24 @@ public class ProdutoService {
 	
 	public void deadEndOferta(String nome) {
 		pd = pr.findByNomeIgnoreCase(nome);
-		Instant ldt1 = pd.getLimiteVenda();
+		Instant ldt1 = Instant.parse(pd.getLimiteVenda());
 		Instant ldt2 = Instant.now();
 		Duration duration = Duration.between(ldt2, ldt1);
 		if((duration.getSeconds() < 10860) && (duration.getSeconds() > 10800)) {
-			pd.setLimiteVenda(ldt1.plusSeconds(30));
+			ldt1.plusSeconds(30);
+			pd.setLimiteVenda(ldt1.toString());
 			pr.saveAndFlush(pd);
 		}
 	}
 	
 	public void deadEndOferta(double id) {
 		pd = pr.findById(id);
-		Instant ldt1 = pd.getLimiteVenda();
+		Instant ldt1 = Instant.parse(pd.getLimiteVenda());
 		Instant ldt2 = Instant.now();
 		Duration duration = Duration.between(ldt2, ldt1);
 		if((duration.getSeconds() < 10860) && (duration.getSeconds() > 10800)) {
-			pd.setLimiteVenda(ldt1.plusSeconds(30));
+			ldt1.plusSeconds(30);
+			pd.setLimiteVenda(ldt1.toString());
 			pr.saveAndFlush(pd);
 		}
 	}

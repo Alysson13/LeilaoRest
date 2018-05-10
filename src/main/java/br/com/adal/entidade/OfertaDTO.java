@@ -2,18 +2,18 @@ package br.com.adal.entidade;
 
 public class OfertaDTO {
 	
-	private double id;
+	private Long id;
 	private double oferta;
 	
 	public OfertaDTO() {
 		
 	}
 	
-	public double getId() {
+	public Long getId() {
 		return id;
 	}
 	
-	public void setId(double id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	

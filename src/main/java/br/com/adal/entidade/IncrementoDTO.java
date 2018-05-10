@@ -2,13 +2,13 @@ package br.com.adal.entidade;
 
 public class IncrementoDTO {
 	
-	private double id;
+	private Long id;
 
-	public double getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(double id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 

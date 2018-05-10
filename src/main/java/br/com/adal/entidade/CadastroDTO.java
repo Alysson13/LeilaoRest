@@ -1,13 +1,11 @@
 package br.com.adal.entidade;
 
-import java.time.Instant;
-
 public class CadastroDTO {
 	
 	private String nome;
 	private double valorAtual;
 	private double incOmissao;
-	private Instant limiteVenda;
+	private String limiteVenda;
 	
 	public CadastroDTO() {
 		
@@ -37,11 +35,11 @@ public class CadastroDTO {
 		this.incOmissao = incOmissao;
 	}
 
-	public Instant getLimiteVenda() {
+	public String getLimiteVenda() {
 		return limiteVenda;
 	}
 
-	public void setLimiteVenda(Instant limiteVenda) {
+	public void setLimiteVenda(String limiteVenda) {
 		this.limiteVenda = limiteVenda;
 	}
 }
