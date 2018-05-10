@@ -1,6 +1,9 @@
 package br.com.adal.resources;
 
+import java.sql.SQLException;
+
 import javax.persistence.EntityNotFoundException;
+import javax.sql.rowset.serial.SerialException;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +51,7 @@ public class ProdutoResource {
 	}
 	
 	@PostMapping(value = "/produtos")
-	public Produto cadastraProduto(@RequestBody @Valid CadastroDTO cadastroDTO) {
+	public Produto cadastraProduto(@RequestBody @Valid CadastroDTO cadastroDTO) throws SerialException, SQLException {
 		ps.salvaProdutos(cadastroDTO);
 		ps.checaData(cadastroDTO.getNome());
 		return ps.obtemProdutoporNome(cadastroDTO.getNome());

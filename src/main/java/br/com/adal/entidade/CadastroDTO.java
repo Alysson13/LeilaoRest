@@ -6,6 +6,7 @@ public class CadastroDTO {
 	private double valorAtual;
 	private double incOmissao;
 	private String limiteVenda;
+	private String foto;
 	
 	public CadastroDTO() {
 		
@@ -17,6 +18,14 @@ public class CadastroDTO {
 
 	public void setNome(String nome) {
 		this.nome = nome;
+	}
+
+	public String getFoto() {
+		return foto;
+	}
+
+	public void setFoto(String foto) {
+		this.foto = foto;
 	}
 
 	public double getValorAtual() {

@@ -1,5 +1,7 @@
 package br.com.adal.entidade;
 
+import java.sql.Blob;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,6 +29,7 @@ public class Produto {
 	private String limiteVenda;
 	private double oferta;
 	private String estado;
+	private Blob foto;
 	
 	public String getEstado() {
 		return estado;
@@ -74,6 +77,22 @@ public class Produto {
 	
 	public void setLimiteVenda(String limiteVenda) {
 		this.limiteVenda = limiteVenda;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public Blob getFoto() {
+		return foto;
+	}
+
+	public void setFoto(Blob foto) {
+		this.foto = foto;
 	}
 	
 }

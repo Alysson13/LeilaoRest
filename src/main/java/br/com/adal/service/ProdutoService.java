@@ -1,8 +1,14 @@
 package br.com.adal.service;
 
+import java.sql.Blob;
+import java.sql.SQLException;
 import java.time.Duration;
 import java.time.Instant;
 
+import javax.sql.rowset.serial.SerialBlob;
+import javax.sql.rowset.serial.SerialException;
+
+import org.postgresql.util.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,16 +32,20 @@ public class ProdutoService {
 		return pr.findByNomeIgnoreCase(nome);
 	}
 	
-	public Produto obtemProdutoporId(double id) {
+	public Produto obtemProdutoporId(Long id) {
 		return pr.findById(id);
 	}
 	
-	public void salvaProdutos(CadastroDTO cadastroDTO) {
-		pd.setNome(cadastroDTO.getNome());
-		pd.setIncOmissao(cadastroDTO.getIncOmissao());
-		pd.setLimiteVenda(cadastroDTO.getLimiteVenda());
-		pd.setValorAtual(cadastroDTO.getValorAtual());
-		pr.save(pd);
+	public void salvaProdutos(CadastroDTO cadastroDTO) throws SerialException, SQLException {
+		Produto pd1 = new Produto();
+		pd1.setNome(cadastroDTO.getNome());
+		pd1.setIncOmissao(cadastroDTO.getIncOmissao());
+		pd1.setLimiteVenda(cadastroDTO.getLimiteVenda());
+		pd1.setValorAtual(cadastroDTO.getValorAtual());
+		byte[] decodedByte = Base64.decode(cadastroDTO.getFoto());
+		Blob b = new SerialBlob(decodedByte);
+		pd1.setFoto(b);
+		pr.save(pd1);
 	}
 	
 	public void deletaProdutos(String nome) {
@@ -48,7 +58,7 @@ public class ProdutoService {
 		pr.saveAndFlush(pd);
 	}
 	
-	public void aumentaPorIncremento(double id) {
+	public void aumentaPorIncremento(Long id) {
 		pd = pr.findById(id);
 		pd.setValorAtual(pd.getValorAtual() + pd.getIncOmissao());
 		pr.saveAndFlush(pd);
@@ -67,7 +77,7 @@ public class ProdutoService {
 		}
 	}
 	
-	public void aumentaPorOferta(double id, double oferta) {
+	public void aumentaPorOferta(Long id, double oferta) {
 		pd = pr.findById(id);
 		pd.setOferta(oferta);
 		if ((pd.getValorAtual() + pd.getIncOmissao())>=(pd.getOferta())) {
@@ -95,7 +105,7 @@ public class ProdutoService {
 		}
 	}
 	
-	public void checaData(double id) {
+	public void checaData(Long id) {
 		pd = pr.findById(id);
 		Instant ldt1 = Instant.parse(pd.getLimiteVenda());
 		Instant ldt2 = Instant.now();
@@ -122,7 +132,7 @@ public class ProdutoService {
 		}
 	}
 	
-	public void deadEndOferta(double id) {
+	public void deadEndOferta(Long id) {
 		pd = pr.findById(id);
 		Instant ldt1 = Instant.parse(pd.getLimiteVenda());
 		Instant ldt2 = Instant.now();
