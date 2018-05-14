@@ -2,6 +2,7 @@ package br.com.adal.service;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Base64;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,7 +37,8 @@ public class ProdutoService {
 		pd1.setIncOmissao(cadastroDTO.getIncOmissao());
 		pd1.setLimiteVenda(cadastroDTO.getLimiteVenda());
 		pd1.setValorAtual(cadastroDTO.getValorAtual());
-		pd1.setFoto(cadastroDTO.getFoto().getBytes());;
+		byte[] b = Base64.getDecoder().decode(cadastroDTO.getFoto());
+		pd1.setFoto(b);
 		pr.save(pd1);
 	}
 	

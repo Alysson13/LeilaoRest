@@ -11,7 +11,7 @@ public interface ProdutoRepository extends JpaRepository<Produto, String>{
 	
 	public Produto findByNomeIgnoreCase(String nome);
 	
-	public Produto findById(double id);
+	public Produto findById(Long id);
 	
 	@Transactional
 	public void deleteByNomeIgnoreCase(String nome);

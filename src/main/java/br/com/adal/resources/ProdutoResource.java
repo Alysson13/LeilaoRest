@@ -47,6 +47,14 @@ public class ProdutoResource {
 		return ps.obtemProdutoporNome(nome);
 	}
 	
+	@GetMapping(produces = "application/json", value = "/produtos/id/{id}")
+	public @ResponseBody Produto listaProdutos(@RequestBody @PathVariable("id") Long id){
+		if(ps.obtemProdutoporId(id) == null) {
+			throw new EntityNotFoundException("O produto não está cadastrado na base de dados.");
+		}
+		return ps.obtemProdutoporId(id);
+	}
+	
 	@PostMapping(value = "/produtos")
 	public Produto cadastraProduto(@RequestBody @Valid CadastroDTO cadastroDTO)  {
 		ps.salvaProdutos(cadastroDTO);
