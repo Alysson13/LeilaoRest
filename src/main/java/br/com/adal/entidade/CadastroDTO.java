@@ -7,9 +7,18 @@ public class CadastroDTO {
 	private double incOmissao;
 	private String limiteVenda;
 	private String foto;
+	private String estado;
 	
 	public CadastroDTO() {
 		
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
 	}
 
 	public String getNome() {

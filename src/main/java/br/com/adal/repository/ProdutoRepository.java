@@ -9,10 +9,13 @@ import br.com.adal.entidade.Produto;
 @Repository
 public interface ProdutoRepository extends JpaRepository<Produto, String>{
 	
-	public Produto findByNomeIgnoreCase(String nome);
+	public Iterable<Produto> findByNomeIgnoreCase(String nome);
 	
 	public Produto findById(Long id);
 	
 	@Transactional
 	public void deleteByNomeIgnoreCase(String nome);
+	
+	@Transactional
+	public void deleteById(Long id);
 }

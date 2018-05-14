@@ -23,7 +23,7 @@ public class ProdutoService {
 		return pr.findAll();
 	}
 	
-	public Produto obtemProdutoporNome(String nome){
+	public Iterable<Produto> obtemProdutoporNome(String nome){
 		return pr.findByNomeIgnoreCase(nome);
 	}
 	
@@ -42,33 +42,14 @@ public class ProdutoService {
 		pr.save(pd1);
 	}
 	
-	public void deletaProdutos(String nome) {
-		pr.deleteByNomeIgnoreCase(nome);
-	}
-	
-	public void aumentaPorIncremento(String nome) {
-		pd = pr.findByNomeIgnoreCase(nome);
-		pd.setValorAtual(pd.getValorAtual() + pd.getIncOmissao());
-		pr.saveAndFlush(pd);
+	public void deletaProdutos(Long id) {
+		pr.deleteById(id);
 	}
 	
 	public void aumentaPorIncremento(Long id) {
 		pd = pr.findById(id);
 		pd.setValorAtual(pd.getValorAtual() + pd.getIncOmissao());
 		pr.saveAndFlush(pd);
-	}
-	
-	public void aumentaPorOferta(String nome, double oferta) {
-		pd = pr.findByNomeIgnoreCase(nome);
-		pd.setOferta(oferta);
-		if ((pd.getValorAtual() + pd.getIncOmissao())>=(pd.getOferta())) {
-			pd.setValorAtual(pd.getValorAtual() + pd.getIncOmissao());
-			pr.saveAndFlush(pd);
-		}
-		else {
-			pd.setValorAtual(pd.getOferta());
-			pr.saveAndFlush(pd);
-		}
 	}
 	
 	public void aumentaPorOferta(Long id, double oferta) {
@@ -80,21 +61,6 @@ public class ProdutoService {
 		}
 		else {
 			pd.setValorAtual(pd.getOferta());
-			pr.saveAndFlush(pd);
-		}
-	}
-	
-	public void checaData(String nome) {
-		pd = pr.findByNomeIgnoreCase(nome);
-		Instant ldt1 = Instant.parse(pd.getLimiteVenda());
-		Instant ldt2 = Instant.now();
-		Duration duration = Duration.between(ldt2, ldt1);
-		if((duration.getSeconds()) < 10800) {
-			pd.setEstado("FECHADO");
-			pr.saveAndFlush(pd);
-		}
-		else { 
-			pd.setEstado("ABERTO");
 			pr.saveAndFlush(pd);
 		}
 	}
@@ -114,15 +80,15 @@ public class ProdutoService {
 		}
 	}
 	
-	public void deadEndOferta(String nome) {
-		pd = pr.findByNomeIgnoreCase(nome);
-		Instant ldt1 = Instant.parse(pd.getLimiteVenda());
+	public void checaData(CadastroDTO cadastroDTO) {
+		Instant ldt1 = Instant.parse(cadastroDTO.getLimiteVenda());
 		Instant ldt2 = Instant.now();
 		Duration duration = Duration.between(ldt2, ldt1);
-		if((duration.getSeconds() < 10860) && (duration.getSeconds() > 10800)) {
-			ldt1.plusSeconds(30);
-			pd.setLimiteVenda(ldt1.toString());
-			pr.saveAndFlush(pd);
+		if((duration.getSeconds()) < 10800) {
+			cadastroDTO.setEstado("FECHADO");
+		}
+		else { 
+			cadastroDTO.setEstado("ABERTO");
 		}
 	}
 	

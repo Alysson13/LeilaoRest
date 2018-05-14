@@ -40,7 +40,7 @@ public class ProdutoResource {
 	}
 	
 	@GetMapping(produces = "application/json", value = "/produtos/{nome}")
-	public @ResponseBody Produto listaProdutos(@RequestBody @PathVariable("nome") String nome){
+	public @ResponseBody Iterable<Produto> listaProdutos(@RequestBody @PathVariable("nome") String nome){
 		if(ps.obtemProdutoporNome(nome) == null) {
 			throw new EntityNotFoundException("O produto " + nome + " não está cadastrado na base de dados.");
 		}
@@ -56,10 +56,10 @@ public class ProdutoResource {
 	}
 	
 	@PostMapping(value = "/produtos")
-	public Produto cadastraProduto(@RequestBody @Valid CadastroDTO cadastroDTO)  {
+	public String cadastraProduto(@RequestBody @Valid CadastroDTO cadastroDTO)  {
+		ps.checaData(cadastroDTO);
 		ps.salvaProdutos(cadastroDTO);
-		ps.checaData(cadastroDTO.getNome());
-		return ps.obtemProdutoporNome(cadastroDTO.getNome());
+		return "Produto cadastrado com sucesso!";
 	}
 	
 	@PostMapping(value = "/produtos/oferta")
@@ -86,11 +86,11 @@ public class ProdutoResource {
 	
 	@DeleteMapping(value = "/produtos/{nome}")
 	public String deletaProduto(@RequestBody @Valid @PathVariable("nome") ProdutoDTO produtoDTO ) {
-		if(ps.obtemProdutoporNome(produtoDTO.getNome()) == null) {
+		if(ps.obtemProdutoporId(produtoDTO.getId()) == null) {
 			throw new EntityNotFoundException("O produto " + produtoDTO.getNome() + " já não existe na base de dados.");
 		}
-		ps.deletaProdutos(produtoDTO.getNome());
-		return "Produto " + produtoDTO.getNome() + " deletado do banco de dados.";
+		ps.deletaProdutos(produtoDTO.getId());
+		return "Produto deletado do banco de dados.";
 	}
 		
 }
