@@ -84,8 +84,8 @@ public class ProdutoResource {
 		return ps.obtemProdutoporId(incrementoDTO.getId());
 	}
 	
-	@DeleteMapping(value = "/produtos/{nome}")
-	public String deletaProduto(@RequestBody @Valid @PathVariable("nome") ProdutoDTO produtoDTO ) {
+	@DeleteMapping(value = "/produtos/{id}")
+	public String deletaProduto(@RequestBody @Valid @PathVariable("id") ProdutoDTO produtoDTO ) {
 		if(ps.obtemProdutoporId(produtoDTO.getId()) == null) {
 			throw new EntityNotFoundException("O produto " + produtoDTO.getNome() + " já não existe na base de dados.");
 		}

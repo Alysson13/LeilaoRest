@@ -39,6 +39,7 @@ public class ProdutoService {
 		pd1.setValorAtual(cadastroDTO.getValorAtual());
 		byte[] b = Base64.getDecoder().decode(cadastroDTO.getFoto());
 		pd1.setFoto(b);
+		pd1.setEstado(cadastroDTO.getEstado());
 		pr.save(pd1);
 	}
 	
